@@ -1,7 +1,6 @@
-import { YoutubeTranscript } from "youtube-transcript";
+const { YoutubeTranscript } = require("youtube-transcript");
 
-export default async function handler(req, res) {
-  // CORS headers
+module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -32,4 +31,4 @@ export default async function handler(req, res) {
     }
     return res.status(502).json({ error: "Failed to fetch transcript: " + msg });
   }
-}
+};
