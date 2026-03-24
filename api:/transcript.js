@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { YoutubeTranscript } = await import("youtube-transcript");
+    const { YoutubeTranscript } = require("youtube-transcript");
     const items = await YoutubeTranscript.fetchTranscript(videoId, { lang: "en" });
     const transcript = items.map((i) => i.text).join(" ").replace(/\s+/g, " ").trim();
     if (!transcript || transcript.length < 50) {
@@ -21,4 +21,4 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(502).json({ error: err.message });
   }
-}
+};
