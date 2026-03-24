@@ -5,8 +5,3 @@
     "youtube-transcript": "^1.2.1"
   }
 }
-```
-
-Commit, let Vercel redeploy, then test:
-```
-https://slide-sync-rho.vercel.app/api/transcript?videoId=dQw4w9WgXcQ
