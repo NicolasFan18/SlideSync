@@ -1,8 +1,2 @@
-{
-  "functions": {
-    "api/transcript.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
-}
+{}
 
