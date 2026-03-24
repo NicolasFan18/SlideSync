@@ -1,8 +1,0 @@
-{
-  "name": "slidesync-backend",
-  "version": "1.0.0",
-  "description": "SlideSync transcript API",
-  "dependencies": {
-    "youtube-transcript": "^1.2.1"
-  }
-}

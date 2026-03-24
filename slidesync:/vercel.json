@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/transcript", "destination": "/api/transcript.js" }
-  ]
-}
