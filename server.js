@@ -90,7 +90,7 @@ Rules: 1 title, 1 overview (3-5 bullets), 5-12 step slides, 1-3 tip slides, 1 su
           },
           body: JSON.stringify({
             model: "claude-sonnet-4-20250514",
-            max_tokens: 1000,
+            max_tokens: 4000,
             system: sys,
             messages: [{ role: "user", content: "Transcript:\n\n" + transcript.slice(0, 10000) }]
           })
