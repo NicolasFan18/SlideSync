@@ -3,7 +3,7 @@ const url = require("url");
 const fetch = require("node-fetch");
 
 const SUPADATA_KEY = "sd_727ea7f3e1bfd0163146af61bb550c99";
-const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY;;
+const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY;
 
 const server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
