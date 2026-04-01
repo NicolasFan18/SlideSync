@@ -9,6 +9,7 @@
   :root {
     --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28; --border: #2a2a3a;
     --accent: #ff6b35; --accent2: #ffd166; --text: #f0eee8; --muted: #888899; --slide-bg: #111118;
+    --chat-w: 380px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
@@ -20,14 +21,11 @@
   .logo-dot { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.7);} }
 
-
-
   #home { position:relative; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:calc(100vh - 80px); padding:60px 24px; text-align:center; }
   .eyebrow { font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:20px; opacity:0; animation:fadeUp .6s .1s ease forwards; }
   h1 { font-family:'Syne',sans-serif; font-size:clamp(2.4rem,6vw,5rem); font-weight:800; line-height:1.05; letter-spacing:-2px; max-width:780px; opacity:0; animation:fadeUp .6s .2s ease forwards; }
   h1 em { font-style:normal; color:var(--accent2); }
   .subtitle { margin-top:20px; font-size:1.1rem; color:var(--muted); max-width:480px; line-height:1.6; font-weight:300; opacity:0; animation:fadeUp .6s .3s ease forwards; }
-
   .input-wrap { margin-top:48px; width:100%; max-width:640px; opacity:0; animation:fadeUp .6s .4s ease forwards; }
   .input-row { display:flex; background:var(--surface); border:1.5px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color .2s,box-shadow .2s; }
   .input-row:focus-within { border-color:var(--accent); box-shadow:0 0 0 4px rgba(255,107,53,.12); }
@@ -39,25 +37,70 @@
   .go-btn:disabled { background:#555; cursor:not-allowed; }
   .go-btn svg { width:18px; height:18px; }
   .hint { margin-top:12px; font-size:.8rem; color:var(--muted); text-align:left; padding-left:4px; }
-
   #status { margin-top:32px; font-size:.95rem; color:var(--muted); display:none; align-items:center; gap:10px; }
   #status.visible { display:flex; }
   .spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
   @keyframes spin { to{transform:rotate(360deg);} }
-
   .error-msg { background:rgba(255,80,80,.1); border:1px solid rgba(255,80,80,.3); color:#ff8080; padding:14px 20px; border-radius:10px; font-size:.9rem; margin-top:16px; max-width:640px; display:none; text-align:left; line-height:1.5; }
   .error-msg.visible { display:block; }
 
-  /* ── SLIDESHOW ── */
+  /* ── SLIDESHOW LAYOUT ── */
   #slideshow { display:none; position:relative; z-index:5; min-height:100vh; flex-direction:column; }
   #slideshow.visible { display:flex; }
+
+  .slideshow-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slides-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    transition: margin-right 0.35s ease;
+  }
+
+  .slideshow-body.chat-open .slides-main {
+    margin-right: var(--chat-w);
+  }
+
   .slides-header { padding:20px 48px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-  .slide-title-bar { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:400px; }
+  .slide-title-bar { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:300px; }
   .back-btn { background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:8px 16px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; display:flex; align-items:center; gap:6px; transition:background .2s; }
   .back-btn:hover { background:var(--border); }
   .progress-wrap { display:flex; align-items:center; gap:12px; font-size:.85rem; color:var(--muted); }
   .progress-bar-track { width:140px; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
   .progress-bar-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .4s ease; }
+
+  /* Chat toggle button */
+  .chat-toggle-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .chat-toggle-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .chat-toggle-btn.active { background: var(--accent); border-color: var(--accent); }
+  .chat-toggle-btn svg { width: 18px; height: 18px; }
+  .chat-unread {
+    position: absolute;
+    top: -3px; right: -3px;
+    width: 10px; height: 10px;
+    background: var(--accent2);
+    border-radius: 50%;
+    display: none;
+  }
+  .chat-unread.visible { display: block; }
+
   .slide-stage { flex:1; display:flex; align-items:center; justify-content:center; padding:48px 24px; }
   .slide-card { background:var(--slide-bg); border:1px solid var(--border); border-radius:20px; width:100%; max-width:860px; min-height:460px; padding:56px 64px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; animation:slideIn .35s ease; }
   @keyframes slideIn { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
@@ -79,10 +122,213 @@
   .thumb { flex-shrink:0; background:var(--surface); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; cursor:pointer; font-size:.75rem; color:var(--muted); max-width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:all .2s; }
   .thumb:hover { border-color:var(--accent); color:var(--text); }
   .thumb.active { border-color:var(--accent); background:rgba(255,107,53,.1); color:var(--accent); }
+
+  /* ── CHAT PANEL ── */
+  .chat-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: var(--chat-w);
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .chat-panel.open {
+    transform: translateX(0);
+  }
+
+  .chat-panel-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .chat-panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chat-ai-dot {
+    width: 8px; height: 8px;
+    background: var(--success, #06d6a0);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .chat-close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color .2s;
+  }
+  .chat-close-btn:hover { color: var(--text); }
+  .chat-close-btn svg { width: 18px; height: 18px; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .chat-welcome {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .chat-welcome strong { color: var(--text); display: block; margin-bottom: 6px; font-family: 'Syne', sans-serif; }
+
+  .chat-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeUp .2s ease;
+  }
+
+  .chat-msg.user { align-items: flex-end; }
+  .chat-msg.assistant { align-items: flex-start; }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .chat-msg.user .chat-bubble {
+    background: var(--accent);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  .chat-msg.assistant .chat-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+  }
+
+  .chat-typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+  }
+
+  .chat-typing span {
+    width: 6px; height: 6px;
+    background: var(--muted);
+    border-radius: 50%;
+    animation: typing .8s ease-in-out infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: .15s; }
+  .chat-typing span:nth-child(3) { animation-delay: .3s; }
+
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  .chat-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 16px 12px;
+    flex-shrink: 0;
+  }
+
+  .chat-suggestion {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: pointer;
+    text-align: left;
+    transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chat-suggestion:hover { border-color: var(--accent); color: var(--text); }
+
+  .chat-input-row {
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    outline: none;
+    resize: none;
+    max-height: 100px;
+    transition: border-color .2s;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--muted); }
+
+  .chat-send-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    width: 38px; height: 38px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+    flex-shrink: 0;
+    align-self: flex-end;
+  }
+  .chat-send-btn:hover { background: #ff8557; }
+  .chat-send-btn:disabled { background: #555; cursor: not-allowed; }
+  .chat-send-btn svg { width: 16px; height: 16px; }
+
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
   @media (max-width:600px) {
-    header{padding:20px 24px;} .setup-banner{padding:12px 20px; flex-wrap:wrap;}
-    .slide-card{padding:36px 28px;} .slides-header{padding:16px 20px;} .thumb-strip{padding:0 20px 24px;}
+    header{padding:20px 24px;}
+    .slide-card{padding:36px 28px;}
+    .slides-header{padding:16px 20px;}
+    .thumb-strip{padding:0 20px 24px;}
+    .chat-panel { width: 100%; }
+    :root { --chat-w: 100vw; }
   }
 </style>
 </head>
@@ -92,8 +338,6 @@
   <div class="logo-dot"></div>
   <div class="logo">Slide<span>Sync</span></div>
 </header>
-
-
 
 <section id="home">
   <p class="eyebrow">YouTube to Slideshow</p>
@@ -114,113 +358,121 @@
 </section>
 
 <section id="slideshow">
-  <div class="slides-header">
-    <button class="back-btn" onclick="goHome()">← Back</button>
-    <div class="slide-title-bar" id="deckTitle">Loading…</div>
-    <div class="progress-wrap">
-      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-      <span id="progressLabel">1 / 1</span>
+  <div class="slideshow-body" id="slideshowBody">
+
+    <!-- Main slide area -->
+    <div class="slides-main">
+      <div class="slides-header">
+        <button class="back-btn" onclick="goHome()">← Back</button>
+        <div class="slide-title-bar" id="deckTitle">Loading…</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="progress-wrap">
+            <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+            <span id="progressLabel">1 / 1</span>
+          </div>
+          <!-- Chat bubble button -->
+          <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()" title="Ask AI tutor">
+            <div class="chat-unread" id="chatUnread"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="slide-stage"><div class="slide-card" id="slideCard"></div></div>
+      <div class="slide-nav">
+        <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>←</button>
+        <div class="slide-dots" id="dotRow"></div>
+        <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
+      </div>
+      <div class="thumb-strip" id="thumbStrip"></div>
     </div>
+
+    <!-- Chat panel -->
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-panel-header">
+        <div class="chat-panel-title">
+          <div class="chat-ai-dot"></div>
+          AI Tutor
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-welcome">
+          <strong>👋 Hi! I'm your AI tutor.</strong>
+          I know everything in this video. Ask me anything — stuck on a step, hit an error, or want a deeper explanation.
+        </div>
+      </div>
+
+      <div class="chat-suggestions" id="chatSuggestions">
+        <button class="chat-suggestion" onclick="sendSuggestion(this)">What is this step actually doing?</button>
+        <button class="chat-suggestion" onclick="sendSuggestion(this)">I got an error — how do I fix it?</button>
+        <button class="chat-suggestion" onclick="sendSuggestion(this)">Can you explain this more simply?</button>
+      </div>
+
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="Ask anything about this tutorial…" rows="1"
+          onkeydown="handleChatKey(event)"></textarea>
+        <button class="chat-send-btn" id="chatSendBtn" onclick="sendChat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+
   </div>
-  <div class="slide-stage"><div class="slide-card" id="slideCard"></div></div>
-  <div class="slide-nav">
-    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>←</button>
-    <div class="slide-dots" id="dotRow"></div>
-    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
-  </div>
-  <div class="thumb-strip" id="thumbStrip"></div>
 </section>
 
 <script>
 let slides = [], current = 0;
+let transcript = "";
+let chatHistory = [];
+let chatOpen = false;
 
-// ── WORKER URL ──────────────────────────────
-const WORKER_URL = "https://slidesync.vercel.app"; // Update this after deploying to Vercel
+const SERVER = "https://slidesync-qydg.onrender.com";
 
-function getWorkerUrl() {
-  return WORKER_URL;
-}
-
-// ── VIDEO ID ──────────────────────────────────
 function extractVideoId(url) {
   const m = url.match(/(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([A-Za-z0-9_-]{11})/)
     || url.match(/^([A-Za-z0-9_-]{11})$/);
   return m ? m[1] : null;
 }
 
-// ── FETCH TRANSCRIPT via Worker ───────────────
 async function fetchTranscript(videoId) {
-  const workerUrl = getWorkerUrl();
-  if (!workerUrl) throw new Error("No Worker URL configured.");
-
-  let res;
-  try {
-    res = await fetch(workerUrl + "/api/transcript?videoId=" + videoId);
-  } catch (e) {
-    throw new Error("Could not reach the Worker. Check it is deployed: " + e.message);
-  }
-
-  let body;
-  try {
-    body = await res.text();
-  } catch (e) {
-    throw new Error("Worker returned an unreadable response.");
-  }
-
-  if (!body || body.trim().length === 0) {
-    throw new Error("Worker returned an empty response (HTTP " + res.status + ").");
-  }
-
-  let data;
-  try {
-    data = JSON.parse(body);
-  } catch (e) {
-    throw new Error("Worker returned invalid JSON. Response was: " + body.slice(0, 120));
-  }
-
+  const res = await fetch(SERVER + "/transcript?videoId=" + videoId);
+  if (!res.ok) { const err = await res.text(); throw new Error("Server error " + res.status + ": " + err.slice(0, 200)); }
+  const data = await res.json();
   if (data.error) throw new Error(data.error);
-  if (!data.transcript) throw new Error("Worker response had no transcript field.");
+  if (!data.transcript) throw new Error("No transcript returned.");
   return data.transcript;
 }
 
-// ── GENERATE SLIDES VIA CLAUDE API ───────────
-async function generateSlides(transcript) {
-  const sys = `Convert video transcripts into slideshow JSON. Return ONLY a valid JSON array, no markdown fences, no explanation.
-Each slide object: {"type":"title"|"overview"|"step"|"tip"|"summary","heading":"max 8 words","body":"string or string[]","stepNumber":N}
-Rules: 1 title, 1 overview (3-5 bullets), 5-12 step slides, 1-3 tip slides, 1 summary. Concise and actionable.`;
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system: sys,
-      messages: [{ role: "user", content: "Transcript:\n\n" + transcript.slice(0, 10000) }]
-    })
+async function generateSlides(t) {
+  const res = await fetch(SERVER + "/slides", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ transcript: t })
   });
   const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  const raw = (data.content.find(b => b.type === "text") || {}).text || "";
-  return JSON.parse(raw.replace(/```json|```/g, "").trim());
+  if (data.error) throw new Error(data.error);
+  if (!data.slides) throw new Error("No slides returned.");
+  return data.slides;
 }
 
-// ── MAIN ──────────────────────────────────────
 async function handleGenerate() {
   const url = document.getElementById("ytUrl").value.trim();
   if (!url) return;
   const videoId = extractVideoId(url);
   if (!videoId) return showError("That doesn't look like a valid YouTube URL.");
-
   setStatus("Fetching transcript…");
   setError("");
   document.getElementById("goBtn").disabled = true;
-
   try {
-    const transcript = await fetchTranscript(videoId);
+    transcript = await fetchTranscript(videoId);
     setStatus("Generating slides with AI…");
     slides = await generateSlides(transcript);
     current = 0;
+    chatHistory = [];
     renderSlideshow();
     showSlideshow();
   } catch (err) {
@@ -231,7 +483,6 @@ async function handleGenerate() {
   }
 }
 
-// ── RENDER ────────────────────────────────────
 function renderSlideshow() {
   document.getElementById("deckTitle").textContent = (slides[0] || {}).heading || "Slideshow";
   document.getElementById("thumbStrip").innerHTML = slides.map((s,i) =>
@@ -266,13 +517,129 @@ function renderSlide() {
 function navigate(dir) { var n=current+dir; if(n>=0&&n<slides.length){current=n;renderSlide();} }
 function goTo(i) { current=i; renderSlide(); }
 function showSlideshow() { document.getElementById("home").style.display="none"; document.getElementById("slideshow").classList.add("visible"); }
-function goHome() { document.getElementById("slideshow").classList.remove("visible"); document.getElementById("home").style.display="flex"; }
+function goHome() {
+  document.getElementById("slideshow").classList.remove("visible");
+  document.getElementById("home").style.display="flex";
+  if (chatOpen) toggleChat();
+}
 function setStatus(msg) { document.getElementById("status").classList.toggle("visible",!!msg); document.getElementById("statusText").textContent=msg; }
 function setError(msg) { var el=document.getElementById("errorMsg"); el.textContent=msg; el.classList.toggle("visible",!!msg); }
 function showError(msg) { setError(msg); }
 
+// ── CHAT ─────────────────────────────────────
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById("chatPanel").classList.toggle("open", chatOpen);
+  document.getElementById("slideshowBody").classList.toggle("chat-open", chatOpen);
+  document.getElementById("chatToggleBtn").classList.toggle("active", chatOpen);
+  document.getElementById("chatUnread").classList.remove("visible");
+  if (chatOpen) {
+    setTimeout(() => document.getElementById("chatInput").focus(), 350);
+  }
+}
+
+function getCurrentSlideText() {
+  const s = slides[current];
+  if (!s) return "";
+  const body = Array.isArray(s.body) ? s.body.join(", ") : s.body;
+  return s.heading + ": " + body;
+}
+
+function appendMessage(role, text) {
+  const msgs = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = "chat-msg " + role;
+  div.innerHTML = '<div class="chat-bubble">' + text.replace(/\n/g, "<br>") + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = "chat-msg assistant";
+  div.id = "typingIndicator";
+  div.innerHTML = '<div class="chat-typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById("typingIndicator");
+  if (t) t.remove();
+}
+
+function hideSuggestions() {
+  document.getElementById("chatSuggestions").style.display = "none";
+}
+
+async function sendChat() {
+  const input = document.getElementById("chatInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  hideSuggestions();
+  input.value = "";
+  input.style.height = "auto";
+
+  appendMessage("user", message);
+  chatHistory.push({ role: "user", content: message });
+
+  document.getElementById("chatSendBtn").disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch(SERVER + "/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message,
+        transcript,
+        currentSlide: getCurrentSlideText(),
+        history: chatHistory.slice(-10) // last 10 messages for context
+      })
+    });
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      appendMessage("assistant", "Sorry, I hit an error: " + data.error);
+    } else {
+      appendMessage("assistant", data.reply);
+      chatHistory.push({ role: "assistant", content: data.reply });
+    }
+
+    // Show unread dot if panel is closed
+    if (!chatOpen) {
+      document.getElementById("chatUnread").classList.add("visible");
+    }
+  } catch (err) {
+    removeTyping();
+    appendMessage("assistant", "Sorry, I couldn't connect. Please try again.");
+  } finally {
+    document.getElementById("chatSendBtn").disabled = false;
+  }
+}
+
+function sendSuggestion(btn) {
+  document.getElementById("chatInput").value = btn.textContent;
+  sendChat();
+}
+
+function handleChatKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+  // Auto-resize textarea
+  const ta = document.getElementById("chatInput");
+  ta.style.height = "auto";
+  ta.style.height = Math.min(ta.scrollHeight, 100) + "px";
+}
+
 document.addEventListener("keydown", function(e) {
   if (!document.getElementById("slideshow").classList.contains("visible")) return;
+  if (document.getElementById("chatInput") === document.activeElement) return;
   if (e.key==="ArrowRight"||e.key==="ArrowDown") navigate(1);
   if (e.key==="ArrowLeft"||e.key==="ArrowUp") navigate(-1);
 });
